@@ -21,7 +21,6 @@ import torch.backends.cudnn as cudnn
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data
-import torch.nn.functional as F
 import yaml
 from tensorboardX import SummaryWriter
 from tqdm import tqdm
@@ -268,13 +267,6 @@ class Processor():
 
         self.model = self.model.cuda(self.output_device)
 
-        # self.model, self.optimizer = apex.amp.initialize(
-        #     self.model,
-        #     self.optimizer,
-        #     opt_level='O1'
-        # )
-        # self.scaler = GradScaler()
-
         if type(self.arg.device) is list:
             if len(self.arg.device) > 1:
                 self.model = nn.DataParallel(
@@ -381,23 +373,6 @@ class Processor():
         else:
             raise ValueError()
 
-    # def adjust_learning_rate(self, epoch, idx):
-    #     if self.arg.optimizer == 'SGD' or self.arg.optimizer == 'Adam':
-    #         if epoch < self.arg.warm_up_epoch:
-    #             lr = self.arg.base_lr * (epoch + 1) / self.arg.warm_up_epoch
-    #         else:
-    #             T_max = len(self.data_loader['train']) * (self.arg.num_epoch - self.arg.warm_up_epoch)
-    #             T_cur = len(self.data_loader['train']) * (epoch - self.arg.warm_up_epoch) + idx
-    #
-    #             # eta_min = self.arg.base_lr * self.arg.lr_ratio
-    #             eta_min = 0
-    #             lr = eta_min + 0.5 * (self.arg.base_lr - eta_min) * (1 + np.cos((T_cur / T_max) * np.pi))
-    #         for param_group in self.optimizer.param_groups:
-    #             param_group['lr'] = lr
-    #         return lr
-    #     else:
-    #         raise ValueError()
-
     def print_time(self):
         localtime = time.asctime(time.localtime(time.time()))
         self.print_log("Local current time :  " + localtime)
@@ -427,7 +402,6 @@ class Processor():
         self.adjust_learning_rate(epoch)
 
         loss_value = []
-        h_loss_values = []
         acc_value = []
         self.train_writer.add_scalar('epoch', epoch, self.global_step)
         self.record_time()
@@ -435,7 +409,6 @@ class Processor():
         process = tqdm(loader, ncols=40)
 
         for batch_idx, (data, label, index) in enumerate(process):
-            # self.adjust_learning_rate(epoch, batch_idx)
             self.global_step += 1
             with torch.no_grad():
                 data = data.float().cuda(self.output_device)
@@ -443,10 +416,14 @@ class Processor():
             timer['dataloader'] += self.split_time()
 
             # forward
-            output, h_x_list = self.model(data)
-            h_loss = self.h_loss(h_x_list)
-            ce_loss = self.loss(output, label)
-            loss = ce_loss + h_loss
+            output = self.model(data)
+            if isinstance(output, tuple):
+                ce_loss = self.loss(output[0], label)
+                h_loss = self.h_loss(output[1])
+                loss = ce_loss + h_loss
+                output = output[0]
+            else:
+                loss = self.loss(output, label)
 
             # backward
             self.optimizer.zero_grad()
@@ -454,7 +431,6 @@ class Processor():
             self.optimizer.step()
 
             loss_value.append(loss.data.item())
-            h_loss_values.append(h_loss.data.item())
             timer['model'] += self.split_time()
 
             value, predict_label = torch.max(output.data, 1)
@@ -462,8 +438,6 @@ class Processor():
             acc_value.append(acc.data.item())
             self.train_writer.add_scalar('acc', acc, self.global_step)
             self.train_writer.add_scalar('loss', loss.data.item(), self.global_step)
-            self.train_writer.add_scalar('ce_loss', ce_loss.data.item(), self.global_step)
-            self.train_writer.add_scalar('h_loss', h_loss.data.item(), self.global_step)
 
 
             # statistics
@@ -477,7 +451,7 @@ class Processor():
             for k, v in timer.items()
         }
         self.print_log(
-            '\tMean training loss: {:.4f}. Mean training P: {:.4f}. Mean training acc: {:.2f}%.'.format(np.mean(loss_value), np.mean(h_loss_values), np.mean(acc_value)*100))
+            '\tMean training loss: {:.4f}. Mean training acc: {:.2f}%.'.format(np.mean(loss_value), np.mean(acc_value)*100))
         self.print_log('\tTime consumption: [Data]{dataloader}, [Network]{model}'.format(**proportion))
 
         if save_model:
@@ -495,21 +469,21 @@ class Processor():
         for ln in loader_name:
             loss_value = []
             score_frag = []
-            # label_list = []
-            # pred_list = []
             step = 0
             process = tqdm(self.data_loader[ln], ncols=40)
             for batch_idx, (data, label, index) in enumerate(process):
                 with torch.no_grad():
                     data = data.float().cuda(self.output_device)
                     label = label.long().cuda(self.output_device)
-                    output, _ = self.model(data)
-                    loss = self.loss(output, label)
-                    # label_list.append(label.cpu())
+                    output = self.model(data)
+                    if isinstance(output, tuple):
+                        loss = self.loss(output[0], label)
+                        output = output[0]
+                    else:
+                        loss = self.loss(output, label)
                     score_frag.append(output.cpu())
                     loss_value.append(loss.data.item())
                     _, predict_label = torch.max(output.data, 1)
-                    # pred_list.append(predict_label.data.cpu())
                     step += 1
                 if wrong_file is not None or result_file is not None:
                     predict = list(predict_label.cpu().numpy())

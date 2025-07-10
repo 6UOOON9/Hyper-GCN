@@ -24,7 +24,7 @@ def get_raw_bodies_data(skes_path, ske_name, frames_drop_skes, frames_drop_logge
         - num_frames: the number of valid frames.
     """
     if int(ske_name[1:4]) >= 18:
-        skes_path = '../../../../Dataset/nturgbd_skeletons_s018_to_s032'
+        skes_path = '../nturgbd_raw/nturgb+d_skeletons120/'
     ske_file = osp.join(skes_path, ske_name + '.skeleton')
     assert osp.exists(ske_file), 'Error: Skeleton file %s not found' % ske_file
     # Read all data from .skeleton file into a list (in string format)
@@ -136,7 +136,7 @@ def get_raw_skes_data():
 if __name__ == '__main__':
     save_path = './'
 
-    skes_path = '../../../../Dataset/nturgbd_skeletons_s001_to_s017/nturgb+d_skeletons'
+    skes_path = '../nturgbd_raw/nturgb+d_skeletons/'
     stat_path = osp.join(save_path, 'statistics')
     if not osp.exists('./raw_data'):
         os.makedirs('./raw_data')
