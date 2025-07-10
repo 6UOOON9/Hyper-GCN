@@ -1,0 +1,12 @@
+torch == 1.13.1
+torchvision == 0.14.1
+torchaudio==0.13.1
+torchpack == 0.2.2
+numpy == 1.26.4
+PyYAML
+tqdm
+tensorboardX
+matplotlib
+scikit-learn
+h5py
+opencv-python
