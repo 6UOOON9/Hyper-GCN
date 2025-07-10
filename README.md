@@ -8,9 +8,8 @@ This repo is the official implementation for [Adaptive Hyper-Graph Convolution N
 - torchpack == 0.2.2
 - numpy == 1.26.4
 - PyYAML, tqdm, tensorboardX, matplotlib, sklearn, h5py, opencv
-
-- We provide the dependency file of our experimental environment, you can install all dependencies by creating a new anaconda virtual environment and running `pip install -r requirements.txt `
-- Run `pip install -e torchlight` 
+- Run `pip install -e torchlight`
+We provide the dependency file of our experimental environment, you can install all dependencies by creating a new anaconda virtual environment and running `pip install -r requirements.txt `
 
 # Data Preparation
 
