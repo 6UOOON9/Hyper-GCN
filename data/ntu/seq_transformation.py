@@ -169,7 +169,7 @@ def split_dataset(skes_joints, label, performer, camera, evaluation, save_path):
     test_y = one_hot_vector(test_labels)
 
     save_name = 'NTU60_%s.npz' % evaluation
-    np.savez('../' + save_name, x_train=train_x, y_train=train_y, x_test=test_x, y_test=test_y)
+    np.savez(save_name, x_train=train_x, y_train=train_y, x_test=test_x, y_test=test_y)
 
     # Save data into a .h5 file
     # h5file = h5py.File(osp.join(save_path, 'NTU_%s.h5' % (evaluation)), 'w')
@@ -213,14 +213,13 @@ def get_indices(performer, camera, evaluation='CS'):
         test_ids = 1
         # Get indices of test data
         temp = np.where(camera == test_ids)[0]  # 0-based index
-        a = np.random.choice(temp, 1000)
         test_indices = np.hstack((test_indices, temp)).astype(int)
 
         # Get indices of training data
         for train_id in train_ids:
             temp = np.where(camera == train_id)[0]  # 0-based index
             train_indices = np.hstack((train_indices, temp)).astype(int)
-        train_indices = np.hstack((train_indices, a)).astype(int)
+
     return train_indices, test_indices
 
 
