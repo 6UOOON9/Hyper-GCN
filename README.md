@@ -75,29 +75,18 @@ Put downloaded data into the following directory structure:
 
 ### Training
 
-- We provide the training configs in 4 modalities (joint, bone, joint motion and bone motion) for each benchmark. 
-You can change the config file depending on what you want. As a example for NTU120 on X-Sub with device 0:
+- We provide the training configs for base and large version in 4 modalities (joint, bone, joint motion and bone motion) for each benchmark. 
+You can change the config file depending on what you want. As a example for base version on NTU120 X-Sub with device 0:
 
 ```
 # train for modality joint
-python main.py --config config/nturgbd120-cross-subject/hyper_joint.yaml --work-dir <the save path of results> --device 0
+python main.py --config config/base/nturgbd120-cross-subject/hyper_joint.yaml --work-dir <the save path of results> --device 0
 # train for modality bone
-python main.py --config config/nturgbd120-cross-subject/hyper_bone.yaml --work-dir <the save path of results> --device 0
+python main.py --config config/base/nturgbd120-cross-subject/hyper_bone.yaml --work-dir <the save path of results> --device 0
 # train for modality joint motion
-python main.py --config config/nturgbd120-cross-subject/hyper_joint_motion.yaml --work-dir <the save path of results> --device 0
+python main.py --config config/base/nturgbd120-cross-subject/hyper_joint_motion.yaml --work-dir <the save path of results> --device 0
 # train for modality bone motion
-python main.py --config config/nturgbd120-cross-subject/hyper_bone_motion.yaml --work-dir <the save path of results> --device 0
-```
-- As a example for NTU60 on X-Sub with device 0:
-```
-# train for modality joint
-python main.py --config config/nturgbd-cross-subject/hyper_joint.yaml --work-dir <the save path of results> --device 0
-# train for modality bone
-python main.py --config config/nturgbd-cross-subject/hyper_bone.yaml --work-dir <the save path of results> --device 0
-# train for modality joint motion
-python main.py --config config/nturgbd-cross-subject/hyper_joint_motion.yaml --work-dir <the save path of results> --device 0
-# train for modality bone motion
-python main.py --config config/nturgbd-cross-subject/hyper_bone_motion.yaml --work-dir <the save path of results> --device 0
+python main.py --config config/base/nturgbd120-cross-subject/hyper_bone_motion.yaml --work-dir <the save path of results> --device 0
 ```
 
 ### Testing
@@ -108,9 +97,9 @@ python main.py --config config/nturgbd-cross-subject/hyper_bone_motion.yaml --wo
 python main.py --config <the save path of results>/config.yaml --work-dir <the save path of results> --phase test --save-score True --weights <the save path of results>/xxx.pt --device 0
 ```
 
-- If you want to ensemble the results of 4 modalities for the final result, run the following command (As a example for NTU120 on X-Sub): 
+- If you want to ensemble the results of 4 modalities for the final result, run the following command (As a example for base version on NTU120 X-Sub): 
 ```
-python ensemble.py --datasets ntu120/xsub --joint-dir <the save path of result on joint> --bone-dir <the save path of result on bone> --joint-motion-dir <the save path of result on joint motion> --bone-motion-dir <the save path of result on bone motion>
+python ensemble.py --datasets ntu120/xsub --model base --joint-dir <the save path of result on joint> --bone-dir <the save path of result on bone> --joint-motion-dir <the save path of result on joint motion> --bone-motion-dir <the save path of result on bone motion>
 ```
 
 # Pretrained Models
