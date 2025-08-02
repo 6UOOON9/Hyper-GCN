@@ -5,17 +5,35 @@ import os
 import numpy as np
 from tqdm import tqdm
 
+ensemble_alpha = {
+    'base': {
+        'ntu/xsub': [1, 1.4, 1.1, 0.3],
+        'ntu/xview': [1., 1.4, 1.1, 0.6],
+        'ntu120/xsub': [1, 1.5, 0.7, 0.3],
+        'ntu120/xset': [1, 1.5, 0.7, 0.3],
+    },
+    'large':{
+        'ntu/xsub': [1, 1.4, 1, 0.5],
+        'ntu/xview': [1, 1.4, 1, 0.5],
+        'ntu120/xsub': [1, 1.5, 0.7, 0.3],
+        'ntu120/xset': [1., 1.5, 0.6, 0.6],
+    }
+}
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset',
                         required=True,
                         choices={'ntu/xsub', 'ntu/xview', 'ntu120/xsub', 'ntu120/xset', 'NW-UCLA'},
                         help='the work folder for storing results')
+    parser.add_argument('--model',
+                        default='base',
+                        choices=['base', 'large'],
+                        help='the version of model')
     parser.add_argument('--alpha',
                         default=1,
                         help='weighted summation',
                         type=float)
-
     parser.add_argument('--joint-dir',
                         help='Directory containing "epoch1_test_score.pkl" for joint eval results')
     parser.add_argument('--bone-dir',
@@ -65,16 +83,10 @@ if __name__ == "__main__":
 
     right_num = total_num = right_num_5 = 0
 
-    if arg.dataset=='ntu120/xsub':
-        arg.alpha = [1, 1.5, 0.7, 0.3]
-    elif arg.dataset == 'ntu120/xset':
-        arg.alpha = [1, 1.5, 0.6, 0.6]
-    elif arg.dataset == 'ntu/xsub':
-        arg.alpha = [0.8, 1.5, 1, 0.5]
-    elif arg.dataset == 'ntu/xview':
-        arg.alpha = [1., 1.4, 1.1, 0.6]
+
 
     if arg.joint_motion_dir is not None and arg.bone_motion_dir is not None:
+        arg.alpha = ensemble_alpha[arg.model][arg.dataset]
         for i in tqdm(range(len(label))):
             l = label[i]
             _, r11 = r1[i]
@@ -118,5 +130,5 @@ if __name__ == "__main__":
         acc = right_num / total_num
         acc5 = right_num_5 / total_num
 
-    print('Top1 Acc: {:.4f}%'.format(acc * 100))
-    print('Top5 Acc: {:.4f}%'.format(acc5 * 100))
+    print('Top1 Acc: {:.2f}%'.format(round(acc * 100, 2)))
+    print('Top5 Acc: {:.2f}%'.format(round(acc5 * 100, 2)))
