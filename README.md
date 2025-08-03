@@ -105,7 +105,7 @@ python ensemble.py --datasets ntu120/xsub --model base --joint-dir <the save pat
 # Pretrained Models
 
 We provide the pretrained weights, configs and training logs. 
-You can download pretrained models for producing the final results on NTU 60 & 120 in [Comming Soon!]().
+You can download pretrained models for producing the final results on NTU 60 & 120 in [Google Drive](https://drive.google.com/drive/folders/1Zi6l8NL_mp7I7v8FjizlRNTk7wZlNfkQ?usp=sharing).
 
 ## Acknowledgements
 
