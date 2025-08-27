@@ -1,6 +1,11 @@
 # Hyper-GCN
 This repo is the official implementation for [Adaptive Hyper-Graph Convolution Network for Skeleton-based Human Action Recognition with Virtual Connections](https://arxiv.org/pdf/2411.14796). The paper is accepted to ICCV 2025.
 
+# Visualization
+| ![Drink water](./assets/A001P001.gif) | ![Stand up](./assets/A009P003.gif) | ![Clapping](./assets/A010P001.gif) | ![Jump up](./assets/A027P003.gif) |
+|:------------:|:------------:|:------------:|:------------:|
+|*Drink water*|*Stand up*|*Clapping*|*Jump up*|
+
 
 # Prerequisites
 - Python == 3.9
