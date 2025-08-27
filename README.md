@@ -1,5 +1,25 @@
 # Hyper-GCN
-This repo is the official implementation for [Adaptive Hyper-Graph Convolution Network for Skeleton-based Human Action Recognition with Virtual Connections](https://arxiv.org/pdf/2411.14796). The paper is accepted to ICCV 2025.
+This repo is the official implementation for [Adaptive Hyper-Graph Convolution Network for Skeleton-based Human Action Recognition with Virtual Connections](https://arxiv.org/pdf/2411.14796). The paper is accepted to ICCV 2025 :tada::tada::tada:
+
+# Illustration
+<div align='center'>
+   <img src="./assets/illustration.png" width="500"/><br>
+</div>
+<!-- ![Illustration](./assets/illustration.png) -->
+
+**Illustration of Hyper-GCN.** 
+In (a), dotted lines represent the virtualconnections. Each coloured part containing multiple joints represents a hyper-graph with hyper-edges. 
+(b) provides an intuitive comparison between normal graph convolution and hyper-graph convolution operations with the same connectivity degree.
+
+# Framework
+<div align='center'>
+   <img src="./assets/framework.png"/><br>
+</div>
+
+**The framework of Hyper-GCN.**
+Part (a) represents the Multi-head Hyper-graph Convolution (M-HGC) module.
+Part (b) represents the process of constructing an adaptive hyper-graph.
+Part (c) represents the architecture of Hyper-GCN.
 
 # Visualization
 | ![Drink water](./assets/A001P001.gif) | ![Stand up](./assets/A009P003.gif) | ![Clapping](./assets/A010P001.gif) | ![Jump up](./assets/A027P003.gif) |
