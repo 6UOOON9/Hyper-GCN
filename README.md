@@ -25,7 +25,8 @@ Part (c) represents the architecture of Hyper-GCN.
 | ![Drink water](./assets/A001P001.gif) | ![Stand up](./assets/A009P003.gif) | ![Clapping](./assets/A010P001.gif) | ![Jump up](./assets/A027P003.gif) |
 |:------------:|:------------:|:------------:|:------------:|
 |*Drink water*|*Stand up*|*Clapping*|*Jump up*|
-
+| ![Neck pain](./assets/A047P001.gif) | ![Wipe face](./assets/A037P003.gif) | ![Hopping](./assets/A026P001.gif) | ![Kicking something](./assets/A024P003.gif) |
+|*Neck pain*|*Wipe face*|*Hopping*|*Kicking something*|
 
 # Prerequisites
 - Python == 3.9
