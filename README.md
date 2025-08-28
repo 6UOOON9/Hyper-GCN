@@ -28,6 +28,8 @@ Part (c) represents the architecture of Hyper-GCN.
 | ![Neck pain](./assets/A047P001.gif) | ![Wipe face](./assets/A037P003.gif) | ![Hopping](./assets/A026P001.gif) | ![Kicking something](./assets/A024P003.gif) |
 |*Neck pain*|*Wipe face*|*Hopping*|*Kicking something*|
 
+There are some selected actions for visualizing the hyper-graph constructed by Hyper-GCN.
+
 # Prerequisites
 - Python == 3.9
 - PyTorch == 1.13.0
