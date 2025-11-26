@@ -76,7 +76,7 @@ class HYPERGC(nn.Module):
                 nn.Conv1d(num_subset * self.hidden_channels, num_subset, kernel_size=1),
                 nn.Tanh()
             )
-            self.hyper_joint = nn.Parameter(torch.zeros(self.virtual_num, in_channels))
+            self.hyper_joint = nn.Parameter(torch.randn(1, in_channels).repeat(self.virtual_num, 1))
             self.alpha = nn.Parameter(torch.ones(1))
             self.softmax = nn.Softmax(dim=-1)
 
@@ -148,10 +148,10 @@ class HYPERGC(nn.Module):
 
             W = self.to_W(t_x)
 
-            H = self.hyper_norm(H, W)
+            G = self.hyper_norm(H, W)
             alpha = self.alpha
             alpha = self.relu(alpha)
-            A = A + alpha * H
+            A = A + alpha * G
 
         d_x = self.conv_d(x)
         d_x = d_x.view(N, self.num_subset, self.mid_out_channels, T, V)
@@ -316,6 +316,7 @@ class Model(nn.Module):
             Graph = import_class(graph)
             self.graph = Graph(hyper_joints, **graph_args)
 
+        # A = np.stack([np.eye(num_point)] * 3, axis=0)
         A = self.graph.A
         self.num_class = num_class
         self.num_point = num_point
@@ -337,6 +338,8 @@ class Model(nn.Module):
         self.l9 = TCN_GCN_unit(self.embedding_channels * 2, self.embedding_channels * 2, num_point, hyper_joints, A)
         self.fc = nn.Linear(self.embedding_channels * 2, self.num_class)
 
+        # nn.init.xavier_normal_(self.to_joint_embedding.weight)
+        # nn.init.normal_(self.to_joint_embedding.weight, 0, 1)
         nn.init.normal_(self.fc.weight, 0, math.sqrt(2. / num_class))
         bn_init(self.data_bn, 1)
         if drop_out:
