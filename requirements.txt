@@ -9,4 +9,3 @@ tensorboardX
 matplotlib
 scikit-learn
 h5py
-opencv-python
