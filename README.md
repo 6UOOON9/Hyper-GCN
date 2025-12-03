@@ -1,5 +1,5 @@
 # Hyper-GCN
-This repo is the official implementation for [Adaptive Hyper-Graph Convolution Network for Skeleton-based Human Action Recognition with Virtual Connections](https://arxiv.org/pdf/2411.14796). The paper is accepted to ICCV 2025 :tada::tada::tada:
+This repo is the official implementation for [Adaptive Hyper-Graph Convolution Network for Skeleton-based Human Action Recognition with Virtual Connections](https://arxiv.org/pdf/2411.14796). The paper is accepted to ICCV 2025.
 
 # Illustration
 <div align='center'>
@@ -35,8 +35,7 @@ There are some selected actions for visualizing the hyper-graph constructed by H
 - PyTorch == 1.13.0
 - torchpack == 0.2.2
 - numpy == 1.26.4
-- PyYAML, tqdm, tensorboardX, matplotlib, sklearn, h5py, opencv
-- Run `pip install -e torchlight`
+- PyYAML, tqdm, tensorboardX, matplotlib, sklearn, h5py
 
 We provide the dependency file of our experimental environment, you can install all dependencies by creating a new anaconda virtual environment and running `pip install -r requirements.txt `
 
