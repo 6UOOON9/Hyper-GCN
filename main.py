@@ -25,7 +25,7 @@ import yaml
 from tensorboardX import SummaryWriter
 from tqdm import tqdm
 
-from torchlight import DictAction
+# from torchlight import DictAction
 
 
 import resource
@@ -57,6 +57,20 @@ def str2bool(v):
         raise argparse.ArgumentTypeError('Unsupported value encountered.')
 
 
+class DictAction(argparse.Action):
+    def __init__(self, option_strings, dest, nargs=None, **kwargs):
+        if nargs is not None:
+            raise ValueError("nargs not allowed")
+        super(DictAction, self).__init__(option_strings, dest, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        input_dict = eval(f'dict({values})')  #pylint: disable=W0123
+        output_dict = getattr(namespace, self.dest)
+        for k in input_dict:
+            output_dict[k] = input_dict[k]
+        setattr(namespace, self.dest, output_dict)
+
+
 class DivergenceLoss(nn.Module):
     def __init__(self):
         super(DivergenceLoss, self).__init__()
@@ -76,7 +90,6 @@ class DivergenceLoss(nn.Module):
             loss += loss_p
 
         return loss / len(x)
-
 
 
 def get_parser():
